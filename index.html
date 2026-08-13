@@ -39,7 +39,7 @@
                 <input type="text" class="form-control" id="kontak" placeholder="Contoh: 08123456789" required>
             </div>
 
-            <!-- Website / Situs (Tambahan) -->
+            <!-- Website / Situs -->
             <div class="mb-3">
                 <label for="website" class="form-label fw-semibold">Website / Situs <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" id="website" placeholder="Masukkan nama website / situs" required>
@@ -83,7 +83,7 @@
 
 <script>
     // URL Web App Google Apps Script Anda
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbx08K-mso-7C2TujMV5hc8olHhbLetkcoda0K4o4yhrmLRGFMV6rrfUdE1D04G717KG/exec'; 
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzBQLLy-mKMzrARTN5WwNpf-bWReyI3lbEIi0ExQRomc4q0RN4tjqlpbJR-Ig7KWYhW/exec'; 
 
     const form = document.getElementById('formPengaduan');
     const btnSubmit = document.getElementById('btnSubmit');
@@ -91,64 +91,71 @@
     form.addEventListener('submit', async e => {
         e.preventDefault();
         btnSubmit.disabled = true;
-        btnSubmit.innerText = 'Mengirim & Mengunggah Foto...';
+        btnSubmit.innerText = 'Mengunggah Foto & Mengirim Data...';
 
         const fileInput = document.getElementById('foto');
         const file = fileInput.files[0];
+        let fotoUrl = 'Tidak Ada Foto';
 
-        let fileData = null;
-        let fileName = '';
-        let fileType = '';
+        try {
+            // 1. Upload Foto ke ImgBB Server Gambar (Gratis)
+            if (file) {
+                const formData = new FormData();
+                formData.append('image', file);
 
-        if (file) {
-            fileData = await convertBase64(file);
-            fileName = file.name;
-            fileType = file.type;
+                // API Key ImgBB Publik
+                const imgbbResponse = await fetch('https://api.imgbb.com/1/upload?key=6d2322d071c708a50ed90fad8691417e', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const imgbbResult = await imgbbResponse.json();
+                if (imgbbResult.success) {
+                    // Dapatkan link pendek gambar (model prnt.sc / ibb.co)
+                    fotoUrl = imgbbResult.data.url_viewer || imgbbResult.data.url;
+                } else {
+                    alert('Gagal mengunggah foto ke server. Silakan coba gambar lain.');
+                    btnSubmit.disabled = false;
+                    btnSubmit.innerText = 'Kirim Pengaduan';
+                    return;
+                }
+            }
+
+            // 2. Kirim Data ke Google Sheets
+            const data = {
+                nama: document.getElementById('nama').value,
+                kontak: document.getElementById('kontak').value,
+                website: document.getElementById('website').value,
+                kategori: document.getElementById('kategori').value,
+                judul: document.getElementById('judul').value,
+                pesan: document.getElementById('pesan').value,
+                fotoUrl: fotoUrl
+            };
+
+            fetch(scriptURL, {
+                method: 'POST',
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                alert('Pengaduan Anda berhasil terkirim!');
+                form.reset();
+                btnSubmit.disabled = false;
+                btnSubmit.innerText = 'Kirim Pengaduan';
+            })
+            .catch(error => {
+                alert('Gagal mengirim data ke Google Sheets.');
+                console.error('Error!', error.message);
+                btnSubmit.disabled = false;
+                btnSubmit.innerText = 'Kirim Pengaduan';
+            });
+
+        } catch (error) {
+            alert('Terjadi kesalahan saat memproses data.');
+            console.error(error);
+            btnSubmit.disabled = false;
+            btnSubmit.innerText = 'Kirim Pengaduan';
         }
-
-        const data = {
-            nama: document.getElementById('nama').value,
-            kontak: document.getElementById('kontak').value,
-            website: document.getElementById('website').value, // Ditambahkan di sini
-            kategori: document.getElementById('kategori').value,
-            judul: document.getElementById('judul').value,
-            pesan: document.getElementById('pesan').value,
-            fileData: fileData,
-            fileName: fileName,
-            fileType: fileType
-        };
-
-        fetch(scriptURL, {
-            method: 'POST',
-            body: JSON.stringify(data)
-        })
-        .then(response => {
-            alert('Pengaduan dan bukti foto Anda berhasil terkirim!');
-            form.reset();
-            btnSubmit.disabled = false;
-            btnSubmit.innerText = 'Kirim Pengaduan';
-        })
-        .catch(error => {
-            alert('Gagal mengirim data. Silakan coba lagi.');
-            console.error('Error!', error.message);
-            btnSubmit.disabled = false;
-            btnSubmit.innerText = 'Kirim Pengaduan';
-        });
     });
-
-    // Fungsi konversi file gambar ke Base64
-    function convertBase64(file) {
-        return new Promise((resolve, reject) => {
-            const fileReader = new FileReader();
-            fileReader.readAsDataURL(file);
-            fileReader.onload = () => {
-                resolve(fileReader.result);
-            };
-            fileReader.onerror = (error) => {
-                reject(error);
-            };
-        });
-    }
 </script>
 
 </body>
