@@ -39,6 +39,12 @@
                 <input type="text" class="form-control" id="kontak" placeholder="Contoh: 08123456789" required>
             </div>
 
+            <!-- Website / Situs (Tambahan) -->
+            <div class="mb-3">
+                <label for="website" class="form-label fw-semibold">Website / Situs <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="website" placeholder="Masukkan nama website / situs" required>
+            </div>
+
             <!-- Kategori Pengaduan -->
             <div class="mb-3">
                 <label for="kategori" class="form-label fw-semibold">Kategori Pengaduan <span class="text-danger">*</span></label>
@@ -76,7 +82,7 @@
 </div>
 
 <script>
-    // URL Web App Google Apps Script
+    // URL Web App Google Apps Script Anda
     const scriptURL = 'https://script.google.com/macros/s/AKfycbzBQLLy-mKMzrARTN5WwNpf-bWReyI3lbEIi0ExQRomc4q0RN4tjqlpbJR-Ig7KWYhW/exec'; 
 
     const form = document.getElementById('formPengaduan');
@@ -103,6 +109,7 @@
         const data = {
             nama: document.getElementById('nama').value,
             kontak: document.getElementById('kontak').value,
+            website: document.getElementById('website').value, // Ditambahkan di sini
             kategori: document.getElementById('kategori').value,
             judul: document.getElementById('judul').value,
             pesan: document.getElementById('pesan').value,
