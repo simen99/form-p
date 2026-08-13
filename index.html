@@ -33,10 +33,21 @@
                 <input type="text" class="form-control" id="nama" placeholder="Masukkan User ID Anda" required>
             </div>
 
-            <!-- No. WhatsApp -->
+            <!-- No. WhatsApp (Hanya Angka & Minimal 6 Digit) -->
             <div class="mb-3">
                 <label for="kontak" class="form-label fw-semibold">No. WhatsApp <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="kontak" placeholder="Contoh: 08123456789" required>
+                <input 
+                    type="tel" 
+                    class="form-control" 
+                    id="kontak" 
+                    placeholder="Contoh: 08123456789" 
+                    inputmode="numeric"
+                    pattern="[0-9]{6,}"
+                    minlength="6"
+                    title="Nomor WhatsApp harus berupa angka dan minimal 6 digit"
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                    required>
+                <div class="form-text">Hanya angka, minimal 6 digit.</div>
             </div>
 
             <!-- Website / Situs -->
@@ -45,14 +56,15 @@
                 <input type="text" class="form-control" id="website" placeholder="Masukkan nama website / situs" required>
             </div>
 
-            <!-- Kategori Pengaduan -->
+            <!-- Kategori Pengaduan (Diperbarui) -->
             <div class="mb-3">
                 <label for="kategori" class="form-label fw-semibold">Kategori Pengaduan <span class="text-danger">*</span></label>
                 <select class="form-select" id="kategori" required>
                     <option value="" selected disabled>-- Pilih Kategori --</option>
-                    <option value="Deposit / Withdraw">Deposit / Withdraw</option>
-                    <option value="Kritik / Saran">Kritik / Saran</option>
-                    <option value="Kendala Umum">Kendala Umum</option>
+                    <option value="Agen bersikap tidak sopan">Agen bersikap tidak sopan</option>
+                    <option value="Agen lambat / tidak merespons">Agen lambat / tidak merespons</option>
+                    <option value="Agen memberikan informasi yang salah">Agen memberikan informasi yang salah</option>
+                    <option value="Agen tidak memberikan solusi yang sesuai">Agen tidak memberikan solusi yang sesuai</option>
                 </select>
             </div>
 
