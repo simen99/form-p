@@ -6,6 +6,9 @@
     <title>Pengaduan Pelayanan Member</title>
     <!-- CSS Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- SweetAlert2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    
     <style>
         body { background-color: #f0f2f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         .form-card {
@@ -33,21 +36,21 @@
                 <input type="text" class="form-control" id="nama" placeholder="Masukkan User ID Anda" required>
             </div>
 
-            <!-- No. WhatsApp (Hanya Angka & Minimal 6 Digit) -->
+            <!-- No. WhatsApp -->
             <div class="mb-3">
                 <label for="kontak" class="form-label fw-semibold">No. WhatsApp <span class="text-danger">*</span></label>
                 <input 
                     type="tel" 
                     class="form-control" 
                     id="kontak" 
-                    placeholder="Contoh : 08123456789" 
+                    placeholder="Contoh: 08123456789" 
                     inputmode="numeric"
                     pattern="[0-9]{6,}"
                     minlength="6"
-                    title="Nomor WhatsApp harus berupa angka"
+                    title="Nomor WhatsApp harus berupa angka dan minimal 6 digit"
                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                     required>
-                <div class="form-text">Wajib di isi dengan nomor wa valid.</div>
+                <div class="form-text">Hanya angka, minimal 6 digit.</div>
             </div>
 
             <!-- Website / Situs -->
@@ -56,7 +59,7 @@
                 <input type="text" class="form-control" id="website" placeholder="Masukkan nama website / situs" required>
             </div>
 
-            <!-- Kategori Pengaduan (Diperbarui) -->
+            <!-- Kategori Pengaduan -->
             <div class="mb-3">
                 <label for="kategori" class="form-label fw-semibold">Kategori Pengaduan <span class="text-danger">*</span></label>
                 <select class="form-select" id="kategori" required>
@@ -80,7 +83,7 @@
                 <textarea class="form-control" id="pesan" rows="4" placeholder="Jelaskan detail pengaduan Anda..." required></textarea>
             </div>
 
-            <!-- Upload Foto / Gambar Bukti -->
+            <!-- Upload Foto / Bukti -->
             <div class="mb-4">
                 <label for="foto" class="form-label fw-semibold">Upload Bukti Foto / Screenshot <span class="text-danger">*</span></label>
                 <input type="file" class="form-control" id="foto" accept="image/*" required>
@@ -93,13 +96,15 @@
     </div>
 </div>
 
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbx-1NZ9IUdVLUofuKNqHGf62AdIGKdWe5iDrv49Ix1iDz3j5fwF4HDZGLPe2hHUpNvW/exec'; 
 
     const form = document.getElementById('formPengaduan');
     const btnSubmit = document.getElementById('btnSubmit');
 
-    // Fungsi Kompres Gambar Otomatis (Mengecilkan file dari MB ke KB)
     function compressImage(file, maxWidth = 1000, quality = 0.7) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -123,7 +128,6 @@
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
 
-                    // Konversi ke JPEG terkompresi
                     const dataUrl = canvas.toDataURL('image/jpeg', quality);
                     resolve(dataUrl);
                 };
@@ -145,7 +149,6 @@
 
         try {
             if (file) {
-                // Kompres gambar secara otomatis sebelum dikirim
                 fileData = await compressImage(file);
             }
 
@@ -166,20 +169,38 @@
                 body: JSON.stringify(data)
             })
             .then(response => {
-                alert('Pengaduan Anda berhasil terkirim!');
+                // POP UP SUKSES TANPA URL BROWSER
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Pengaduan Anda berhasil terkirim!',
+                    text: 'Team Kami akan mereview laporan ini',
+                    confirmButtonColor: '#0d6efd',
+                    confirmButtonText: 'OK'
+                });
+
                 form.reset();
                 btnSubmit.disabled = false;
                 btnSubmit.innerText = 'Kirim Pengaduan';
             })
             .catch(error => {
-                alert('Gagal mengirim data. Silakan coba lagi.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal Terkirim',
+                    text: 'Terjadi kendala jaringan. Silakan coba lagi.',
+                    confirmButtonColor: '#0d6efd'
+                });
                 console.error('Error!', error.message);
                 btnSubmit.disabled = false;
                 btnSubmit.innerText = 'Kirim Pengaduan';
             });
 
         } catch (error) {
-            alert('Gagal memproses file foto.');
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal Memproses Gambar',
+                text: 'Silakan pilih gambar bukti lain.',
+                confirmButtonColor: '#0d6efd'
+            });
             console.error(error);
             btnSubmit.disabled = false;
             btnSubmit.innerText = 'Kirim Pengaduan';
