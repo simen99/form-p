@@ -27,54 +27,88 @@
         <p class="text-secondary mb-4">Silakan isi formulir di bawah ini untuk menyampaikan pengaduan Anda.</p>
         
         <form id="formPengaduan">
+            <!-- User ID -->
             <div class="mb-3">
                 <label for="nama" class="form-label fw-semibold">User ID <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="nama" placeholder="Masukkan nama Anda" required>
+                <input type="text" class="form-control" id="nama" placeholder="Masukkan User ID Anda" required>
             </div>
+
+            <!-- No. WhatsApp -->
             <div class="mb-3">
-                <label for="kontak" class="form-label fw-semibold">No Wa Aktif <span class="text-danger">*</span></label>
+                <label for="kontak" class="form-label fw-semibold">No. WhatsApp <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" id="kontak" placeholder="Contoh: 08123456789" required>
             </div>
+
+            <!-- Kategori Pengaduan -->
             <div class="mb-3">
                 <label for="kategori" class="form-label fw-semibold">Kategori Pengaduan <span class="text-danger">*</span></label>
                 <select class="form-select" id="kategori" required>
                     <option value="" selected disabled>-- Pilih Kategori --</option>
-                    <option value="Layanan Publik">Deposit / Withdraw</option>
-                    <option value="Fasilitas Umum">Kritik / Saran</option>
-                    <option value="Lainnya">Lainnya</option>
+                    <option value="Deposit / Withdraw">Deposit / Withdraw</option>
+                    <option value="Kritik / Saran">Kritik / Saran</option>
+                    <option value="Kendala Umum">Kendala Umum</option>
                 </select>
             </div>
+
+            <!-- Judul Pengaduan -->
             <div class="mb-3">
                 <label for="judul" class="form-label fw-semibold">Judul Pengaduan <span class="text-danger">*</span></label>
                 <input type="text" class="form-control" id="judul" placeholder="Ringkasan singkat pengaduan" required>
             </div>
-            <div class="mb-4">
+
+            <!-- Isi Pengaduan -->
+            <div class="mb-3">
                 <label for="pesan" class="form-label fw-semibold">Isi Pengaduan <span class="text-danger">*</span></label>
                 <textarea class="form-control" id="pesan" rows="4" placeholder="Jelaskan detail pengaduan Anda..." required></textarea>
             </div>
+
+            <!-- Upload Foto / Gambar Bukti -->
+            <div class="mb-4">
+                <label for="foto" class="form-label fw-semibold">Upload Bukti Foto / Screenshot <span class="text-danger">*</span></label>
+                <input type="file" class="form-control" id="foto" accept="image/*" required>
+                <div class="form-text">Format: JPG, PNG, WEBP (Wajib diunggah)</div>
+            </div>
+
+            <!-- Tombol Kirim -->
             <button type="submit" id="btnSubmit" class="btn btn-primary w-100 py-2 fw-semibold">Kirim Pengaduan</button>
         </form>
     </div>
 </div>
 
 <script>
-    // URL Web App Google Apps Script milik Anda
+    // URL Web App Google Apps Script
     const scriptURL = 'https://script.google.com/macros/s/AKfycbzBQLLy-mKMzrARTN5WwNpf-bWReyI3lbEIi0ExQRomc4q0RN4tjqlpbJR-Ig7KWYhW/exec'; 
 
     const form = document.getElementById('formPengaduan');
     const btnSubmit = document.getElementById('btnSubmit');
 
-    form.addEventListener('submit', e => {
+    form.addEventListener('submit', async e => {
         e.preventDefault();
         btnSubmit.disabled = true;
-        btnSubmit.innerText = 'Mengirim...';
+        btnSubmit.innerText = 'Mengirim & Mengunggah Foto...';
+
+        const fileInput = document.getElementById('foto');
+        const file = fileInput.files[0];
+
+        let fileData = null;
+        let fileName = '';
+        let fileType = '';
+
+        if (file) {
+            fileData = await convertBase64(file);
+            fileName = file.name;
+            fileType = file.type;
+        }
 
         const data = {
             nama: document.getElementById('nama').value,
             kontak: document.getElementById('kontak').value,
             kategori: document.getElementById('kategori').value,
             judul: document.getElementById('judul').value,
-            pesan: document.getElementById('pesan').value
+            pesan: document.getElementById('pesan').value,
+            fileData: fileData,
+            fileName: fileName,
+            fileType: fileType
         };
 
         fetch(scriptURL, {
@@ -82,7 +116,7 @@
             body: JSON.stringify(data)
         })
         .then(response => {
-            alert('Pengaduan Anda berhasil terkirim!');
+            alert('Pengaduan dan bukti foto Anda berhasil terkirim!');
             form.reset();
             btnSubmit.disabled = false;
             btnSubmit.innerText = 'Kirim Pengaduan';
@@ -94,6 +128,20 @@
             btnSubmit.innerText = 'Kirim Pengaduan';
         });
     });
+
+    // Fungsi konversi file gambar ke Base64
+    function convertBase64(file) {
+        return new Promise((resolve, reject) => {
+            const fileReader = new FileReader();
+            fileReader.readAsDataURL(file);
+            fileReader.onload = () => {
+                resolve(fileReader.result);
+            };
+            fileReader.onerror = (error) => {
+                reject(error);
+            };
+        });
+    }
 </script>
 
 </body>
