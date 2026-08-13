@@ -6,11 +6,12 @@
     <title>Pengaduan Pelayanan Member</title>
     <!-- CSS Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- SweetAlert2 CSS (Untuk Pop-up Modern Tanpa Header URL) -->
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     
     <style>
-        body { background-color: #f0f2f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { 
+            background-color: #f0f2f5; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        }
         .form-card {
             max-width: 600px;
             margin: 40px auto;
@@ -19,6 +20,63 @@
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             border-top: 8px solid #0d6efd;
+        }
+
+        /* STYLING POP-UP MODAL CUSTOM (BEBAS DARI POP-UP BROWSER) */
+        .custom-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 99999;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.25s ease-in-out;
+        }
+        .custom-modal-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+        .custom-modal-box {
+            background: #ffffff;
+            padding: 35px 25px;
+            border-radius: 18px;
+            max-width: 420px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+            transform: scale(0.7);
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .custom-modal-overlay.show .custom-modal-box {
+            transform: scale(1);
+        }
+        .modal-icon-wrapper {
+            width: 70px;
+            height: 70px;
+            background: #e8f5e9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px auto;
+        }
+        .modal-title-custom {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+        .modal-desc-custom {
+            font-size: 0.95rem;
+            color: #666666;
+            margin-bottom: 25px;
+            line-height: 1.5;
         }
     </style>
 </head>
@@ -96,15 +154,37 @@
     </div>
 </div>
 
-<!-- SweetAlert2 JS -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- ELEMEN POP-UP MODAL CUSTOM -->
+<div id="customModal" class="custom-modal-overlay">
+    <div class="custom-modal-box">
+        <div class="modal-icon-wrapper">
+            <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#2e7d32" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 6L9 17l-5-5"/>
+            </svg>
+        </div>
+        <h3 class="modal-title-custom">Pengaduan Anda berhasil terkirim!</h3>
+        <p class="modal-desc-custom">Kami akan menindak lanjuti laporan ini</p>
+        <button type="button" class="btn btn-primary w-100 py-2 fw-semibold rounded-pill" onclick="tutupModal()">OK</button>
+    </div>
+</div>
 
 <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbx-1NZ9IUdVLUofuKNqHGf62AdIGKdWe5iDrv49Ix1iDz3j5fwF4HDZGLPe2hHUpNvW/exec'; 
 
     const form = document.getElementById('formPengaduan');
     const btnSubmit = document.getElementById('btnSubmit');
+    const modal = document.getElementById('customModal');
 
+    // Fungsi Buka & Tutup Modal Custom
+    function bukaModal() {
+        modal.classList.add('show');
+    }
+
+    function tutupModal() {
+        modal.classList.remove('show');
+    }
+
+    // Kompres Gambar Otomatis
     function compressImage(file, maxWidth = 1000, quality = 0.7) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -140,7 +220,7 @@
     form.addEventListener('submit', async e => {
         e.preventDefault();
         btnSubmit.disabled = true;
-        btnSubmit.innerText = 'Mengirim laporan...';
+        btnSubmit.innerText = 'Mengompresi & Mengirim...';
 
         const fileInput = document.getElementById('foto');
         const file = fileInput.files[0];
@@ -169,38 +249,20 @@
                 body: JSON.stringify(data)
             })
             .then(response => {
-                // POP-UP MODERN (SWEETALERT2)
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Pengaduan Anda berhasil terkirim!',
-                    text: 'Team Kami akan meng review laporan ini',
-                    confirmButtonColor: '#0d6efd',
-                    confirmButtonText: 'OK'
-                });
-
                 form.reset();
                 btnSubmit.disabled = false;
                 btnSubmit.innerText = 'Kirim Pengaduan';
+                
+                // BUKA POP-UP CUSTOM
+                bukaModal();
             })
             .catch(error => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Gagal Terkirim',
-                    text: 'Terjadi kendala saat mengirim data. Silakan coba lagi.',
-                    confirmButtonColor: '#0d6efd'
-                });
                 console.error('Error!', error.message);
                 btnSubmit.disabled = false;
                 btnSubmit.innerText = 'Kirim Pengaduan';
             });
 
         } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Gagal Memproses Gambar',
-                text: 'Silakan pilih file bukti foto yang lain.',
-                confirmButtonColor: '#0d6efd'
-            });
             console.error(error);
             btnSubmit.disabled = false;
             btnSubmit.innerText = 'Kirim Pengaduan';
