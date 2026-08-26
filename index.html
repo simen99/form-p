@@ -3,26 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pengaduan Pelayanan Member</title>
+    <title>Form Pengaduan Member</title>
     <!-- CSS Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <style>
         body { 
             background-color: #f0f2f5; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
         }
-        .form-card {
-            max-width: 600px;
-            margin: 40px auto;
-            background: #ffffff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            border-top: 8px solid #0d6efd;
+        .form-wrapper {
+            max-width: 640px;
+            margin: 30px auto;
         }
 
-        /* STYLING POP-UP MODAL CUSTOM (BEBAS DARI POP-UP BROWSER) */
+        /* CARD BANNER TERPISAH (GOOGLE FORM STYLE) */
+        .banner-card {
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 15px;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .banner-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
+        /* CARD UTAMA FORM */
+        .form-card {
+            background: #ffffff;
+            padding: 32px 28px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border: 1px solid rgba(0,0,0,0.05);
+            border-top: 10px solid #d93025; /* Garis aksen merah Google Form (bisa diganti #0d6efd jika ingin biru) */
+        }
+
+        /* TYPOGRAPHY HEADER */
+        .form-title {
+            font-size: 1.65rem;
+            font-weight: 800;
+            color: #202124;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+        .form-intro {
+            font-size: 0.95rem;
+            color: #3c4043;
+            line-height: 1.55;
+            margin-bottom: 12px;
+        }
+        .form-points {
+            font-size: 0.92rem;
+            color: #3c4043;
+            padding-left: 22px;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        .form-points li {
+            margin-bottom: 4px;
+        }
+
+        /* STYLING POP-UP MODAL CUSTOM */
         .custom-modal-overlay {
             display: none;
             position: fixed;
@@ -83,84 +130,93 @@
 <body>
 
 <div class="container">
-    <div class="form-card">
-        <!-- Banner Gambar -->
-        <img src="https://raw.githubusercontent.com/simen99/form-p/refs/heads/main/BANNER%20LAPORAN%20P.jpg" alt="Banner Laporan" class="img-fluid rounded mb-3 w-100">
-
-        <h2 class="fw-bold text-dark">Form Pengaduan Member</h2>
+    <div class="form-wrapper">
         
-        <!-- Teks Keterangan di Bawah Judul -->
-        <div class="text-secondary mb-4" style="font-size: 0.95rem; line-height: 1.6;">
-            <p class="mb-2">Terima kasih atas partisipasi Anda, Kami akan mendengar keluhan dan kendala Anda agar kami dapat terus meningkatkan kualitas pelayanan kami. Silakan isi survei singkat ini</p>
-            <p class="mb-1">Aduan anda akan dikirim ke pusat untuk ditindak lanjuti</p>
-            <p class="mb-1">Harap Aduan Pelanggan ini digunakan dengan bijak sesuai kebutuhan</p>
-            <p class="mb-0">Harap tidak melakukan Spam untuk mempermudah pengecekkan tim pusat</p>
+        <!-- 1. HEADER BANNER (TERPISAH & SMOOTH) -->
+        <div class="banner-card">
+            <img src="https://raw.githubusercontent.com/simen99/form-p/refs/heads/main/BANNER%20LAPORAN%20P.jpg" alt="Banner Pengaduan">
         </div>
-        
-        <form id="formPengaduan">
-            <!-- User ID -->
-            <div class="mb-3">
-                <label for="nama" class="form-label fw-semibold">User ID <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="nama" placeholder="Masukkan User ID Anda" required>
-            </div>
 
-            <!-- No. WhatsApp -->
-            <div class="mb-3">
-                <label for="kontak" class="form-label fw-semibold">No. WhatsApp <span class="text-danger">*</span></label>
-                <input 
-                    type="tel" 
-                    class="form-control" 
-                    id="kontak" 
-                    placeholder="Contoh: 08123456789" 
-                    inputmode="numeric"
-                    pattern="[0-9]{6,}"
-                    minlength="6"
-                    title="Nomor WhatsApp harus berupa angka dan minimal 6 digit"
-                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                    required>
-                <div class="form-text">Hanya angka, minimal 6 digit.</div>
-            </div>
+        <!-- 2. KARTU FORM UTAMA -->
+        <div class="form-card">
+            <h1 class="form-title">FORM PENGADUAN PELANGGAN</h1>
+            
+            <p class="form-intro fst-italic">
+                Terima kasih atas partisipasi Anda, Kami akan mendengar keluhan dan kendala Anda agar kami dapat terus meningkatkan kualitas pelayanan kami. Silakan isi survei singkat ini
+            </p>
 
-            <!-- Website / Situs -->
-            <div class="mb-3">
-                <label for="website" class="form-label fw-semibold">Website / Situs <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="website" placeholder="Masukkan nama website / situs" required>
-            </div>
+            <ul class="form-points fst-italic">
+                <li>Aduan anda akan dikirim ke pusat untuk ditindak lanjuti</li>
+                <li>Harap Aduan Pelanggan ini digunakan dengan bijak sesuai kebutuhan</li>
+                <li>Harap tidak melakukan Spam untuk mempermudah pengecekkan tim pusat</li>
+            </ul>
+            
+            <form id="formPengaduan">
+                <!-- User ID -->
+                <div class="mb-3">
+                    <label for="nama" class="form-label fw-semibold">User ID <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="nama" placeholder="Masukkan User ID Anda" required>
+                </div>
 
-            <!-- Kategori Pengaduan -->
-            <div class="mb-3">
-                <label for="kategori" class="form-label fw-semibold">Kategori Pengaduan <span class="text-danger">*</span></label>
-                <select class="form-select" id="kategori" required>
-                    <option value="" selected disabled>-- Pilih Kategori --</option>
-                    <option value="Agen bersikap tidak sopan">Agen bersikap tidak sopan</option>
-                    <option value="Agen lambat / tidak merespons">Agen lambat / tidak merespons</option>
-                    <option value="Agen memberikan informasi yang salah">Agen memberikan informasi yang salah</option>
-                    <option value="Agen tidak memberikan solusi yang sesuai">Agen tidak memberikan solusi yang sesuai</option>
-                </select>
-            </div>
+                <!-- No. WhatsApp -->
+                <div class="mb-3">
+                    <label for="kontak" class="form-label fw-semibold">No. WhatsApp <span class="text-danger">*</span></label>
+                    <input 
+                        type="tel" 
+                        class="form-control" 
+                        id="kontak" 
+                        placeholder="Contoh: 08123456789" 
+                        inputmode="numeric"
+                        pattern="[0-9]{6,}"
+                        minlength="6"
+                        title="Nomor WhatsApp harus berupa angka dan minimal 6 digit"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                        required>
+                    <div class="form-text">Hanya angka, minimal 6 digit.</div>
+                </div>
 
-            <!-- Judul Pengaduan -->
-            <div class="mb-3">
-                <label for="judul" class="form-label fw-semibold">Judul Pengaduan <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="judul" placeholder="Ringkasan singkat pengaduan" required>
-            </div>
+                <!-- Website / Situs -->
+                <div class="mb-3">
+                    <label for="website" class="form-label fw-semibold">Website / Situs <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="website" placeholder="Masukkan nama website / situs" required>
+                </div>
 
-            <!-- Isi Pengaduan -->
-            <div class="mb-3">
-                <label for="pesan" class="form-label fw-semibold">Isi Pengaduan <span class="text-danger">*</span></label>
-                <textarea class="form-control" id="pesan" rows="4" placeholder="Jelaskan detail pengaduan Anda..." required></textarea>
-            </div>
+                <!-- Kategori Pengaduan -->
+                <div class="mb-3">
+                    <label for="kategori" class="form-label fw-semibold">Kategori Pengaduan <span class="text-danger">*</span></label>
+                    <select class="form-select" id="kategori" required>
+                        <option value="" selected disabled>-- Pilih Kategori --</option>
+                        <option value="Agen bersikap tidak sopan">Agen bersikap tidak sopan</option>
+                        <option value="Agen lambat / tidak merespons">Agen lambat / tidak merespons</option>
+                        <option value="Agen memberikan informasi yang salah">Agen memberikan informasi yang salah</option>
+                        <option value="Agen tidak memberikan solusi yang sesuai">Agen tidak memberikan solusi yang sesuai</option>
+                    </select>
+                </div>
 
-            <!-- Upload Foto Bukti -->
-            <div class="mb-4">
-                <label for="foto" class="form-label fw-semibold">Upload Bukti Foto / Screenshot <span class="text-danger">*</span></label>
-                <input type="file" class="form-control" id="foto" accept="image/*" required>
-                <div class="form-text">Format: JPG, PNG, WEBP (Wajib diunggah)</div>
-            </div>
+                <!-- Judul Pengaduan -->
+                <div class="mb-3">
+                    <label for="judul" class="form-label fw-semibold">Judul Pengaduan <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="judul" placeholder="Ringkasan singkat pengaduan" required>
+                </div>
 
-            <!-- Tombol Kirim -->
-            <button type="submit" id="btnSubmit" class="btn btn-primary w-100 py-2 fw-semibold">Kirim Pengaduan</button>
-        </form>
+                <!-- Isi Pengaduan -->
+                <div class="mb-3">
+                    <label for="pesan" class="form-label fw-semibold">Isi Pengaduan <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="pesan" rows="4" placeholder="Jelaskan detail pengaduan Anda..." required></textarea>
+                </div>
+
+                <!-- Upload Foto Bukti -->
+                <div class="mb-4">
+                    <label for="foto" class="form-label fw-semibold">Upload Bukti Foto / Screenshot <span class="text-danger">*</span></label>
+                    <input type="file" class="form-control" id="foto" accept="image/*" required>
+                    <div class="form-text">Format: JPG, PNG, WEBP (Wajib diunggah)</div>
+                </div>
+
+                <!-- Tombol Kirim -->
+                <button type="submit" id="btnSubmit" class="btn btn-primary w-100 py-2 fw-semibold">Kirim Pengaduan</button>
+            </form>
+        </div>
+
     </div>
 </div>
 
