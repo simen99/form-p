@@ -40,33 +40,49 @@
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             border: 1px solid rgba(0,0,0,0.05);
-            border-top: 10px solid #0d6efd; /* Warna garis biru serasi dengan tombol */
+            border-top: 10px solid #0d6efd; /* Garis aksen biru serasi dengan tombol */
         }
 
         /* TYPOGRAPHY HEADER */
         .form-title {
-            font-size: 1.65rem;
+            font-size: 1.6rem;
             font-weight: 800;
-            color: #202124;
+            color: #1a202c;
             letter-spacing: 0.5px;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             text-transform: uppercase;
         }
         .form-intro {
-            font-size: 0.95rem;
-            color: #3c4043;
-            line-height: 1.55;
-            margin-bottom: 12px;
+            font-size: 0.93rem;
+            color: #4a5568;
+            line-height: 1.5;
+            margin-bottom: 18px;
         }
-        .form-points {
-            font-size: 0.92rem;
-            color: #3c4043;
-            padding-left: 22px;
+
+        /* KOTAK INFORMASI / NOTICE BOX */
+        .info-notice-box {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-left: 4px solid #0d6efd;
+            border-radius: 8px;
+            padding: 16px;
             margin-bottom: 25px;
-            line-height: 1.6;
         }
-        .form-points li {
-            margin-bottom: 4px;
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 10px;
+            font-size: 0.88rem;
+            color: #334155;
+            line-height: 1.45;
+        }
+        .info-item:last-child {
+            margin-bottom: 0;
+        }
+        .info-icon {
+            flex-shrink: 0;
+            margin-top: 2px;
         }
 
         /* STYLING POP-UP MODAL CUSTOM */
@@ -141,17 +157,54 @@
         <div class="form-card">
             <h1 class="form-title">FORM PENGADUAN PELANGGAN</h1>
             
-            <p class="form-intro fst-italic">
-                Terima kasih atas partisipasi Anda, Kami akan mendengar keluhan dan kendala Anda agar kami dapat terus meningkatkan kualitas pelayanan kami. Silakan isi survei singkat ini
+            <p class="form-intro">
+                Terima kasih atas partisipasi Anda. Kami siap mendengar keluhan dan kendala Anda agar kami dapat terus meningkatkan kualitas pelayanan. Silakan lengkapi formulir di bawah ini:
             </p>
 
-            <ul class="form-points fst-italic">
-                <li>Formulir ini khusus bagi Anda yang merasa kurang puas dengan pelayanan tim Customer Service kami di Livechat & Whatapps. 
-                    Sampaikan keluhan Anda agar dapat ditangani oleh Team PUSAT</li>
-                <li>Harap tidak melakukan SPAM agar verifikasi dapat berjalan lebih cepat</li>
-                <li>Seluruh data & Identitas anda dijamin kerahasiaannya</li>
-                <li>Pengaduan anda akan diteruskan ke tim pusat dan ditindak lanjuti maksimal 1x24 Jam kerja</li>
-            </ul>
+            <!-- KOTAK INFORMASI / PEMBERITAHUAN RAPI DENGAN IKON -->
+            <div class="info-notice-box">
+                <!-- Poin 1: Penanganan Pusat -->
+                <div class="info-item">
+                    <svg class="info-icon text-primary" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0d6efd" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    <div>
+                        Khusus bagi Anda yang merasa <strong>kurang puas dengan pelayanan CS</strong> (Livechat & WhatsApp). Laporan akan ditangani langsung oleh <strong>Team PUSAT</strong>.
+                    </div>
+                </div>
+
+                <!-- Poin 2: Anti Spam -->
+                <div class="info-item">
+                    <svg class="info-icon text-danger" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#dc3545" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                    </svg>
+                    <div>
+                        Harap <strong>tidak melakukan SPAM</strong> agar verifikasi laporan dapat diproses lebih cepat.
+                    </div>
+                </div>
+
+                <!-- Poin 3: Keamanan Data -->
+                <div class="info-item">
+                    <svg class="info-icon text-success" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#198754" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    <div>
+                        Seluruh data & identitas Anda <strong>dijamin kerahasiaannya 100%</strong>.
+                    </div>
+                </div>
+
+                <!-- Poin 4: Estimasi Waktu -->
+                <div class="info-item">
+                    <svg class="info-icon text-warning" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <div>
+                        Pengaduan akan ditindaklanjuti maksimal dalam <strong>1x24 Jam kerja</strong>.
+                    </div>
+                </div>
+            </div>
             
             <form id="formPengaduan">
                 <!-- User ID -->
